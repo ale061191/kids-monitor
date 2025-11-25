@@ -21,11 +21,14 @@ subprojects {
 
 // FIX: Force all plugins to use a valid compileSdkVersion to avoid errors with old plugins
 subprojects {
-    afterEvaluate {
-        if (extensions.findByName("android") != null) {
-            configure<com.android.build.gradle.BaseExtension> {
-                compileSdkVersion(34)
-            }
+    plugins.withId("com.android.application") {
+        extensions.configure<com.android.build.gradle.BaseExtension> {
+            compileSdkVersion(34)
+        }
+    }
+    plugins.withId("com.android.library") {
+        extensions.configure<com.android.build.gradle.BaseExtension> {
+            compileSdkVersion(34)
         }
     }
 }
