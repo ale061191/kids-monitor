@@ -30,18 +30,26 @@ jobs:
       - name: Create Config File
         working-directory: ./child_module
         run: cp lib/config/app_config.example.dart lib/config/app_config.dart
-          
+      
+      - name: Flutter Doctor
+        run: flutter doctor -v
+        
       - name: Get Dependencies
         working-directory: ./child_module
         run: flutter pub get
+      
+      - name: Clean Build Cache
+        working-directory: ./child_module
+        run: flutter clean
         
       - name: Build APK
         working-directory: ./child_module
         env:
           SUPABASE_URL: ${{ secrets.SUPABASE_URL }}
           SUPABASE_ANON_KEY: ${{ secrets.SUPABASE_ANON_KEY }}
+          GRADLE_OPTS: -Dorg.gradle.logging.level=info
         run: |
-          flutter build apk --release --no-tree-shake-icons \
+          flutter build apk --release --no-tree-shake-icons --verbose \
             --dart-define=SUPABASE_URL=$SUPABASE_URL \
             --dart-define=SUPABASE_ANON_KEY=$SUPABASE_ANON_KEY
         
@@ -73,18 +81,26 @@ jobs:
       - name: Create Config File
         working-directory: ./parent_module
         run: cp lib/config/app_config.example.dart lib/config/app_config.dart
-          
+      
+      - name: Flutter Doctor
+        run: flutter doctor -v
+        
       - name: Get Dependencies
         working-directory: ./parent_module
         run: flutter pub get
+      
+      - name: Clean Build Cache
+        working-directory: ./parent_module
+        run: flutter clean
         
       - name: Build APK
         working-directory: ./parent_module
         env:
           SUPABASE_URL: ${{ secrets.SUPABASE_URL }}
           SUPABASE_ANON_KEY: ${{ secrets.SUPABASE_ANON_KEY }}
+          GRADLE_OPTS: -Dorg.gradle.logging.level=info
         run: |
-          flutter build apk --release --no-tree-shake-icons \
+          flutter build apk --release --no-tree-shake-icons --verbose \
             --dart-define=SUPABASE_URL=$SUPABASE_URL \
             --dart-define=SUPABASE_ANON_KEY=$SUPABASE_ANON_KEY
         
