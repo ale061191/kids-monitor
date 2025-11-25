@@ -1,0 +1,95 @@
+name: Build APKs
+
+on:
+  push:
+    branches: [ "main", "master" ]
+  pull_request:
+    branches: [ "main", "master" ]
+  workflow_dispatch:
+
+jobs:
+  build-child:
+    name: Build Child Module APK
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+      
+      - name: Setup Java
+        uses: actions/setup-java@v4
+        with:
+          distribution: 'zulu'
+          java-version: '17'
+          
+      - name: Setup Flutter
+        uses: subosito/flutter-action@v2
+        with:
+          flutter-version: '3.24.0'
+          channel: 'stable'
+          cache: true
+          
+      - name: Create Config File
+        working-directory: ./child_module
+        run: cp lib/config/app_config.example.dart lib/config/app_config.dart
+          
+      - name: Get Dependencies
+        working-directory: ./child_module
+        run: flutter pub get
+        
+      - name: Build APK
+        working-directory: ./child_module
+        env:
+          SUPABASE_URL: ${{ secrets.SUPABASE_URL }}
+          SUPABASE_ANON_KEY: ${{ secrets.SUPABASE_ANON_KEY }}
+        run: |
+          flutter build apk --release --no-tree-shake-icons \
+            --dart-define=SUPABASE_URL=$SUPABASE_URL \
+            --dart-define=SUPABASE_ANON_KEY=$SUPABASE_ANON_KEY
+        
+      - name: Upload APK
+        uses: actions/upload-artifact@v4
+        with:
+          name: child-module-apk
+          path: child_module/build/app/outputs/flutter-apk/app-release.apk
+
+  build-parent:
+    name: Build Parent Module APK
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+      
+      - name: Setup Java
+        uses: actions/setup-java@v4
+        with:
+          distribution: 'zulu'
+          java-version: '17'
+          
+      - name: Setup Flutter
+        uses: subosito/flutter-action@v2
+        with:
+          flutter-version: '3.24.0'
+          channel: 'stable'
+          cache: true
+          
+      - name: Create Config File
+        working-directory: ./parent_module
+        run: cp lib/config/app_config.example.dart lib/config/app_config.dart
+          
+      - name: Get Dependencies
+        working-directory: ./parent_module
+        run: flutter pub get
+        
+      - name: Build APK
+        working-directory: ./parent_module
+        env:
+          SUPABASE_URL: ${{ secrets.SUPABASE_URL }}
+          SUPABASE_ANON_KEY: ${{ secrets.SUPABASE_ANON_KEY }}
+        run: |
+          flutter build apk --release --no-tree-shake-icons \
+            --dart-define=SUPABASE_URL=$SUPABASE_URL \
+            --dart-define=SUPABASE_ANON_KEY=$SUPABASE_ANON_KEY
+        
+      - name: Upload APK
+        uses: actions/upload-artifact@v4
+        with:
+          name: parent-module-apk
+          path: parent_module/build/app/outputs/flutter-apk/app-release.apk

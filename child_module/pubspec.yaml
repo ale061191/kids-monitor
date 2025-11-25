@@ -1,0 +1,78 @@
+name: child_module
+description: AirDroid Kids Copy - Child Module (Monitored Device)
+publish_to: 'none'
+version: 1.0.0+1
+
+environment:
+  sdk: '>=3.0.0 <4.0.0'
+
+dependencies:
+  flutter:
+    sdk: flutter
+
+  # UI
+  cupertino_icons: ^1.0.6
+  google_fonts: ^6.1.0
+  flutter_svg: ^2.0.9
+  
+  # State Management
+  provider: ^6.1.1
+  get_it: ^7.6.4
+  
+  # Supabase
+  supabase_flutter: ^2.0.0
+  
+  # WebRTC for video/audio streaming
+  flutter_webrtc: ^0.9.48
+  
+  # Camera
+  camera: ^0.10.5+5
+  
+  # Audio
+  # flutter_sound: ^9.2.13  # Removido temporalmente - problemas con SDK 35
+  just_audio: ^0.9.36
+  record: ^5.0.4  # Para grabación de audio
+  permission_handler: ^11.0.1
+  
+  # Location
+  geolocator: ^10.1.0
+  geocoding: ^2.1.1
+  
+  # Background services
+  flutter_background_service: ^5.0.5
+  flutter_local_notifications: ^17.2.3
+  
+  # Device info
+  device_info_plus: ^9.1.1
+  package_info_plus: ^5.0.1
+  
+  # Storage
+  shared_preferences: ^2.2.2
+  path_provider: ^2.1.1
+  
+  # Network
+  connectivity_plus: ^5.0.2
+  
+  # QR Code
+  qr_flutter: ^4.1.0
+  
+  # Encryption
+  encrypt: ^5.0.3
+  crypto: ^3.0.3
+  
+  # Utils
+  uuid: ^4.2.2
+  intl: ^0.18.1
+
+dev_dependencies:
+  flutter_test:
+    sdk: flutter
+  flutter_lints: ^3.0.1
+
+flutter:
+  uses-material-design: true
+  
+  assets:
+    - assets/images/
+    - assets/icons/
+
